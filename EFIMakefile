@@ -1,0 +1,19 @@
+# Run: sudo apt install gnu-efi build-essential gcc-mingw-w64-x86-64
+CC=x86_64-w64-mingw32-gcc
+INC_DIR=/usr/local/gnu-efi/inc
+QEMU=qemu-system-x86_64
+BIOS=/usr/local/bios64.bin
+
+CFLAGS=-ffreestanding -I${INC_DIR} -I${INC_DIR}/x86_64 -I${INC_DIR}/protocol -Wall --std=c99
+
+all: c
+
+c:
+	$(CC) $(CFLAGS) -nostdlib -Wl,-dll -shared -Wl,--subsystem,10 -e efi_main -o BOOTX64.EFI -g -fno-builtin -DRLI *.c $(LDFLAGS)
+
+qemu:
+	mkdir -pv tmpefi/efi/boot
+	cp BOOTX64.EFI tmpefi/efi/boot
+	${QEMU} -bios ${BIOS} -drive file=fat:rw:tmpefi,format=raw
+
+.PHONY: all c qemu
