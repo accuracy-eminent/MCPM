@@ -9,7 +9,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#ifndef EFI_ON
 #include <termios.h>
+#endif
 
 
 typedef struct bios_dpb_s {
@@ -1238,7 +1240,9 @@ void usage( void )
 int main( int ArgC, char **ArgV )
 {
   unsigned short int diskuser;
+  #ifndef EFI_ON
   struct termios t;
+  #endif
   int nextarg = 1;
 
   while( 1 ) {
@@ -1263,6 +1267,7 @@ int main( int ArgC, char **ArgV )
     perror( ArgV[ 1 ] );
     exit( EXIT_FAILURE );
   }
+  #ifndef EFI_ON
 
   if( tcgetattr( fileno( stdin ), &t ) != 0 ) {
     perror( "tcgetattr" );
@@ -1280,6 +1285,7 @@ int main( int ArgC, char **ArgV )
     perror( "tcsetattr" );
     exit( EXIT_FAILURE );
   }
+  #endif
 
   diskuser = bios_boot();
   cpm_bdosinit();
