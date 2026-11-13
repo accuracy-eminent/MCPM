@@ -1,1 +1,8 @@
 exchange
+*.o
+uefi
+uefi/
+tmpefi/
+OVMF.fd
+*.EFI
+*.efi

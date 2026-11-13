@@ -6,11 +6,16 @@
  *	2006-03-06 rli: New P112 disk definition, initial RL02
  *	  definition.
  */
-
+#ifndef EFI_ON
 #include <stdio.h>
 #include <stdlib.h>
-#ifndef EFI_ON
 #include <termios.h>
+#else
+#include <uefi.h>
+#define EXIT_FAILURE 1
+#define EXIT_SUCCESS 0
+// TODO: Better perror solution
+#define perror printf
 #endif
 
 
@@ -442,6 +447,8 @@ void bios_conout( unsigned char victim )
 
 void bios_list( unsigned char victim )
 {
+  // TODO: Implement for EFI
+  #ifndef EFI_ON
   if( bios_printer == NULL ) {
     bios_printer = fopen( "printer.txt", "w" );
     if( bios_printer == NULL ) {
@@ -450,6 +457,7 @@ void bios_list( unsigned char victim )
     }
   }
   fputc( victim, bios_printer );
+  #endif
 }
 
 /***
@@ -1051,15 +1059,20 @@ unsigned short int cpm_load68k( void )
   return 0;
 }
 
+
+#ifndef EFI_ON
 struct termios bios_original_t;
+#endif
 
 void bios_exit( void )
 {
   fclose( bios_diskimage );
+  #ifndef EFI_ON
   if( tcsetattr( fileno( stdin ), TCSANOW, &bios_original_t ) != 0 ) {
     perror( "tcsetattr" );
     exit( EXIT_FAILURE );
   }
+  #endif
   exit( EXIT_SUCCESS );
 }
 
@@ -1242,6 +1255,8 @@ int main( int ArgC, char **ArgV )
   unsigned short int diskuser;
   #ifndef EFI_ON
   struct termios t;
+  #else
+  printf("We are here!!!\n");
   #endif
   int nextarg = 1;
 

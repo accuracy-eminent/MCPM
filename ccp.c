@@ -181,6 +181,7 @@ REG BYTE *dest;
 }
 
 
+#ifndef EFI_ON
 				/********************************/
 UWORD strcmp(s1,s2)	  	/*    compare 2 char strings	*/
 				/********************************/
@@ -196,6 +197,7 @@ REG BYTE *s1,*s2;
 	}
 	return((*s2 == NULL) ? 0 : -1);
 }
+#endif
 				/********************************/
 VOID copy_cmd(com_index)	/*  Save the command which	*/
 				/*  started a submit file       */

@@ -133,7 +133,9 @@
 #define setexc cpm_setexc
 #define setran cpm_setran
 #define set_tpa cpm_set_tpa
+#ifndef EFI_ON
 #define strcmp cpm_strcmp
+#endif
 #define subcom cpm_subcom
 #define subdma cpm_subdma
 #define subfcb cpm_subfcb
