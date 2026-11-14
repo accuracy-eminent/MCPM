@@ -1279,6 +1279,14 @@ int main( int ArgC, char **ArgV )
     break;
   }
 
+  #ifdef EFI_ON
+  if(ArgC == 0)
+  {
+    nextarg = 0;
+    ArgV[nextarg] = "\\efi\\boot\\bootdisk.img";
+  }
+  else
+  #endif
   if( nextarg != ( ArgC - 1 ) ) usage();
 
   printf("Made it to fopen() startup, opening %s!\n", ArgV[ nextarg ]);
