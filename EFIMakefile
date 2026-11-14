@@ -16,5 +16,6 @@ clean2:
 qemu:
 	mkdir -pv tmpefi/efi/boot
 	cp ${TARGET} tmpefi/efi/boot/BOOTX64.EFI
+	cp ./bootdisk.img tmpefi/efi/boot/bootdisk.img
 	${QEMU} -bios ${BIOS} -drive file=fat:rw:tmpefi,format=raw
 .PHONY: clean2 qemu

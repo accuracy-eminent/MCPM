@@ -11,13 +11,15 @@
 #include <stdlib.h>
 #include <termios.h>
 #define ERR_PRINTF(...) fprintf(stderr, __VA_ARGS__);
+#define OPEN_MODE  "rb+"
 #else
 #include <uefi.h>
 #define EXIT_FAILURE 1
 #define EXIT_SUCCESS 0
 // TODO: Better perror solution
-#define perror printf
+#define perror(...) printf(__VA_ARGS__)
 #define ERR_PRINTF(...) printf(__VA_ARGS__)
+#define OPEN_MODE "r"
 #endif
 
 
@@ -1279,11 +1281,14 @@ int main( int ArgC, char **ArgV )
 
   if( nextarg != ( ArgC - 1 ) ) usage();
 
-  bios_diskimage = fopen( ArgV[ nextarg ], "rb+" );
+  printf("Made it to fopen() startup, opening %s!\n", ArgV[ nextarg ]);
+  bios_diskimage = fopen( ArgV[ nextarg ], OPEN_MODE );
+  printf("Made it past fopen() startup, value of bios_diskimage: %p, errno: %d!\n", bios_diskimage, errno);
   if( bios_diskimage == NULL ) {
     perror( ArgV[ 1 ] );
     exit( EXIT_FAILURE );
   }
+  printf("bios_diskimage not null, %p!\n", (void*)bios_diskimage);
   #ifndef EFI_ON
 
   if( tcgetattr( fileno( stdin ), &t ) != 0 ) {
@@ -1303,12 +1308,15 @@ int main( int ArgC, char **ArgV )
     exit( EXIT_FAILURE );
   }
   #endif
+  
+  printf("Made it to BIOS boot!\n");
 
   diskuser = bios_boot();
   cpm_bdosinit();
   cpm_bdos( 32, diskuser >> 8 );
   cpm_bdos( 14, diskuser & 0xff );
 
+  printf("Made it to CCP startup!\n");
   while( 1 ) cpm_ccp();
 
 }
