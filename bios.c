@@ -1291,7 +1291,6 @@ int main( int ArgC, char **ArgV )
 
   printf("Made it to fopen() startup, opening %s!\n", ArgV[ nextarg ]);
   bios_diskimage = fopen( ArgV[ nextarg ], OPEN_MODE );
-  printf("Made it past fopen() startup, value of bios_diskimage: %p, errno: %d!\n", bios_diskimage, errno);
   if( bios_diskimage == NULL ) {
     perror( ArgV[ 1 ] );
     exit( EXIT_FAILURE );
