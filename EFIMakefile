@@ -1,6 +1,7 @@
 # Run: sudo apt install gnu-efi build-essential gcc-mingw-w64-x86-64
 # Also: sudo apt install clang lld ovmf
 # This uses POSIX-UEFI: https://gitlab.com/bztsrc/posix-uefi/
+# Note, to boot in UEFI, boot EFI shell first, then run fs0:\efi\boot\BOOTX64.EFI
 QEMU=qemu-system-x86_64.exe
 BIOS=./OVMF.fd
 CFLAGS=-std=gnu89 -Wno-return-type -DEFI_ON -DRLI

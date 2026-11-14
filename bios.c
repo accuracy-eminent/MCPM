@@ -10,12 +10,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
+#define ERR_PRINTF(...) fprintf(stderr, __VA_ARGS__);
 #else
 #include <uefi.h>
 #define EXIT_FAILURE 1
 #define EXIT_SUCCESS 0
 // TODO: Better perror solution
 #define perror printf
+#define ERR_PRINTF(...) printf(__VA_ARGS__)
 #endif
 
 
@@ -1243,10 +1245,10 @@ void bios_export( void )
 
 void usage( void )
 {
-  fprintf( stderr, "usage: exchange " );
-  fprintf( stderr, "[-p112] " );
-  fprintf( stderr, "[-rl02] " );
-  fprintf( stderr, "imagefile\n" );
+  ERR_PRINTF( "usage: exchange " );
+  ERR_PRINTF( "[-p112] " );
+  ERR_PRINTF( "[-rl02] " );
+  ERR_PRINTF( "imagefile\n" );
   exit( EXIT_FAILURE );
 }
 
@@ -1256,7 +1258,7 @@ int main( int ArgC, char **ArgV )
   #ifndef EFI_ON
   struct termios t;
   #else
-  printf("We are here!!!\n");
+  printf("We are here, argc: %d, argv[0]: %s!!!\n", ArgC, ArgV[0]);
   #endif
   int nextarg = 1;
 
